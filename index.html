@@ -2,9 +2,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Random Seed Redirect</title>
+<title>Random Seed Redirect (Fullscreen)</title>
 <script>
-(function() {
+(async function() {
     const min = BigInt("-9223372036854775808");
     const max = BigInt("9223372036854775807");
 
@@ -20,11 +20,24 @@
 
     const seed = randomBigInt(min, max).toString();
     const targetUrl = `https://landroid.js.org/player15.html#seed=${seed}&zoom=manual`;
+
+    // Try to request fullscreen before redirect
+    try {
+        if (document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+            await document.documentElement.webkitRequestFullscreen();
+        }
+    } catch (err) {
+        console.warn("Fullscreen request failed:", err);
+    }
+
+    // Redirect to the Landroid page
     window.location.href = targetUrl;
 })();
 </script>
 </head>
-<body>
-Redirecting to Landroid with random seed...
+<body style="margin:0; background:black; color:white; display:flex; align-items:center; justify-content:center; height:100vh;">
+Loading Landroid in fullscreen...
 </body>
 </html>
