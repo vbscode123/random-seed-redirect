@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Random Seed Redirect</title>
+<script>
+(function() {
+    const min = BigInt("-9223372036854775808");
+    const max = BigInt("9223372036854775807");
+
+    function randomBigInt(min, max) {
+        const bytes = new Uint8Array(8);
+        crypto.getRandomValues(bytes);
+        let value = 0n;
+        for (let i = 0; i < 8; i++) {
+            value = (value << 8n) + BigInt(bytes[i]);
+        }
+        return min + (value % (max - min + 1n));
+    }
+
+    const seed = randomBigInt(min, max).toString();
+    const targetUrl = `https://landroid.js.org/player15.html#seed=${seed}&zoom=manual`;
+    window.location.href = targetUrl;
+})();
+</script>
+</head>
+<body>
+Redirecting to Landroid with random seed...
+</body>
+</html>
